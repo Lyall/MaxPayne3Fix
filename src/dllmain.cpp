@@ -341,6 +341,7 @@ void UIFix()
 
 void GraphicsTweaks()
 {
+    // TODO: Fix this. It's broken right now.
     if (bShadowQuality)
     {
         uint8_t* ShadowQuality2ScanResult = Memory::PatternScan(baseModule, "83 ?? ?? ?? ?? ?? 03 7C ?? 8D ?? ?? 83 ?? ?? 7E ??");  
