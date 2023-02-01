@@ -164,7 +164,7 @@ void ReadConfig()
     bMovieFix = config.GetBoolean("Fix FMVs", "Enabled", true);
     bLoadingFix = config.GetBoolean("Fix Loading Screens", "Enabled", true);
     bCentreHUD = config.GetBoolean("Centred 16:9 HUD", "Enabled", false);
-    bShadowQuality = config.GetBoolean("Increase Shadow Quality", "Enabled", false);
+    //bShadowQuality = config.GetBoolean("Increase Shadow Quality", "Enabled", false);
     fAdditionalFOV = config.GetFloat("Gameplay FOV", "AdditionalFOV", 0);
 
     // Grab desktop resolution
@@ -198,7 +198,7 @@ void ReadConfig()
     LOG_F(INFO, "Config Parse: bMovieFix: %d", bMovieFix);
     LOG_F(INFO, "Config Parse: bLoadingFix: %d", bLoadingFix);
     LOG_F(INFO, "Config Parse: bCentreHUD: %d", bCentreHUD);
-    LOG_F(INFO, "Config Parse: bShadowQuality: %d", bShadowQuality);
+    //LOG_F(INFO, "Config Parse: bShadowQuality: %d", bShadowQuality);
     LOG_F(INFO, "Config Parse: fAdditionalFOV: %.2f", fAdditionalFOV);
     LOG_F(INFO, "Config Parse: fNewX: %.2f", fNewX);
     LOG_F(INFO, "Config Parse: fNewY: %.2f", fNewY);
@@ -373,7 +373,7 @@ DWORD __stdcall Main(void*)
     MovieFix();
     GameplayFOV();
     UIFix();
-    GraphicsTweaks();
+    //GraphicsTweaks();
     return true; // end thread
 }
 
