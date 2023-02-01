@@ -24,6 +24,10 @@ Please report any issues you see.
 
 ## Screenshots
 
+| ![correct cutscenes](https://user-images.githubusercontent.com/695941/216191824-9aab56df-2469-4654-ac79-daff722e2112.gif) |
+|:--:|
+| Fixed in-game cutscenes. |
+
 | ![scaled FMVs](https://user-images.githubusercontent.com/695941/216190486-a78afa0d-827d-48ab-bd7f-53fb0782caac.gif) |
 |:--:|
 | Correctly scaled FMVs. |
