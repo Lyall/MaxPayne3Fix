@@ -24,6 +24,17 @@ Please report any issues you see.
 
 ## Screenshots
 
+| ![scaled FMVs](https://user-images.githubusercontent.com/695941/216190486-a78afa0d-827d-48ab-bd7f-53fb0782caac.gif) |
+|:--:|
+| Correctly scaled FMVs. |
+
+| ![loading screens](https://user-images.githubusercontent.com/695941/216190470-7670bed0-a7a0-4e88-9d5d-59ef239fc657.gif) |
+|:--:|
+| Correctly scaled loading screens. |
+
+| ![centred hud](https://user-images.githubusercontent.com/695941/216190476-d69b284d-9b0a-4a23-a701-479bee109776.gif) |
+|:--:|
+| Spanned/16:9 centred HUD. |
 
 ## Credits
 [Rose](https://github.com/RoseTheFlower) for sharing a solution to stop fullscreen mode from using your highest-available resolution. <br />
