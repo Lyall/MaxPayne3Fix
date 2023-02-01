@@ -26,7 +26,7 @@ Please report any issues you see.
 
 
 ## Credits
-[Rose](https://github.com/RoseTheFlower)@WSGF Discord for sharing a solution to stop fullscreen mode from using your highest-available resolution. <br />
+[Rose](https://github.com/RoseTheFlower) for sharing a solution to stop fullscreen mode from using your highest-available resolution. <br />
 [jackfuste's original post](https://www.wsgf.org/phpBB3/viewtopic.php?p=172338#p172338) on the WSGF forums for part of the aspect/resolution fix. <br />
 [Ultimate ASI Loader](https://github.com/ThirteenAG/Ultimate-ASI-Loader) for ASI loading. <br />
 [inih](https://github.com/jtilly/inih) for ini reading. <br />
