@@ -9,6 +9,7 @@ HMODULE baseModule = GetModuleHandle(NULL);
 bool bAspectFix;
 bool bMovieFix;
 bool bLoadingFix;
+bool bOverlayFix;
 bool bCentreHUD;
 bool bShadowQuality;
 float fAdditionalFOV;
@@ -107,6 +108,29 @@ void __declspec(naked) LoadingUI_CC()
     }
 }
 
+// Overlay Video Hook
+DWORD OverlayVideoReturnJMP;
+float OverlayVideo_fAspectMultiplier;
+void __declspec(naked) OverlayVideo_CC()
+{
+    __asm
+    {
+        movss xmm0, [fAspectRatio]
+        comiss xmm0, [fNativeAspect]
+        ja OverlayVideo
+        jmp OriginalCode
+
+    OverlayVideo:
+        movss xmm0, [esp + 0x04]
+        mulss xmm0, [fNativeAspect]
+        jmp[OverlayVideoReturnJMP]
+
+    OriginalCode:
+        movss xmm0, [esp + 0x08]
+        jmp [OverlayVideoReturnJMP]
+    }
+}
+
 // HUD Hook
 DWORD HUDReturnJMP;
 void __declspec(naked) HUD_CC()
@@ -163,8 +187,9 @@ void ReadConfig()
     bAspectFix = config.GetBoolean("Fix Aspect", "Enabled", true);
     bMovieFix = config.GetBoolean("Fix FMVs", "Enabled", true);
     bLoadingFix = config.GetBoolean("Fix Loading Screens", "Enabled", true);
+    bOverlayFix = config.GetBoolean("Fix Video Overlays", "Enabled", true);
     bCentreHUD = config.GetBoolean("Centred 16:9 HUD", "Enabled", false);
-    //bShadowQuality = config.GetBoolean("Increase Shadow Quality", "Enabled", false);
+    bShadowQuality = config.GetBoolean("Increase Shadow Quality", "Enabled", false);
     fAdditionalFOV = config.GetFloat("Gameplay FOV", "AdditionalFOV", 0);
 
     // Grab desktop resolution
@@ -197,8 +222,9 @@ void ReadConfig()
     LOG_F(INFO, "Config Parse: bAspectFix: %d", bAspectFix);
     LOG_F(INFO, "Config Parse: bMovieFix: %d", bMovieFix);
     LOG_F(INFO, "Config Parse: bLoadingFix: %d", bLoadingFix);
+    LOG_F(INFO, "Config Parse: bOverlayFix: %d", bOverlayFix);
     LOG_F(INFO, "Config Parse: bCentreHUD: %d", bCentreHUD);
-    //LOG_F(INFO, "Config Parse: bShadowQuality: %d", bShadowQuality);
+    LOG_F(INFO, "Config Parse: bShadowQuality: %d", bShadowQuality);
     LOG_F(INFO, "Config Parse: fAdditionalFOV: %.2f", fAdditionalFOV);
     LOG_F(INFO, "Config Parse: fNewX: %.2f", fNewX);
     LOG_F(INFO, "Config Parse: fNewY: %.2f", fNewY);
@@ -319,6 +345,25 @@ void UIFix()
         }
     }
 
+    if (bOverlayFix) // TODO: Find way to offset overlays back to correct position
+    {
+        uint8_t* OverlayVideoScanResult = Memory::PatternScan(baseModule, "F3 0F ?? ?? ?? ?? F3 0F ?? ?? F3 0F ?? ?? F3 0F ?? ?? F3 0F ?? ?? 8B 11");
+        if (OverlayVideoScanResult)
+        {
+            DWORD OverlayVideoAddress = ((uintptr_t)OverlayVideoScanResult);
+            int OverlayVideoHookLength = Memory::GetHookLength((char*)OverlayVideoAddress, 4);
+            OverlayVideoReturnJMP = OverlayVideoAddress + OverlayVideoHookLength;
+            Memory::DetourFunction32((void*)OverlayVideoAddress, OverlayVideo_CC, OverlayVideoHookLength);
+
+            LOG_F(INFO, "Overlay Videos: Hook length is %d bytes", OverlayVideoHookLength);
+            LOG_F(INFO, "Overlay Videos: Hook address is 0x%" PRIxPTR, (uintptr_t)OverlayVideoAddress);
+        }
+        else if (!OverlayVideoScanResult)
+        {
+            LOG_F(INFO, "Overlay Videos: Pattern scan failed.");
+        }
+    }
+
     if (bCentreHUD)
     {
         uint8_t* HUDScanResult = Memory::PatternScan(baseModule, "D9 05 ?? ?? ?? ?? D9 1C ?? FF D2 C3 CC ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? CC 56 6A");
@@ -373,7 +418,7 @@ DWORD __stdcall Main(void*)
     MovieFix();
     GameplayFOV();
     UIFix();
-    //GraphicsTweaks();
+    GraphicsTweaks();
     return true; // end thread
 }
 
